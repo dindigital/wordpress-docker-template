@@ -1,0 +1,44 @@
+version: '3'
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local
+
+services:
+  wordpress:
+    build:
+      context: ./wordpress
+    volumes:
+      - ./wordpress:/var/www/html:cached
+      - ./wordpress/php.ini:/usr/local/etc/php/conf.d/uploads.ini
+    ports:
+      - "80:80"
+    user: 1000:1000
+    networks:
+      - backend
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: default
+      WORDPRESS_DB_PASSWORD: secret
+      WORDPRESS_DB_NAME: default
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_DEBUG: "true"
+      WORDPRESS_CONFIG_EXTRA: |
+        /* CUSTOM CONFIGS */
+        define('ALLOW_UNFILTERED_UPLOADS', true);
+        define('WP_DEBUG_LOG', true);
+
+  mysql:
+    build:
+      context: ./mysql
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - backend

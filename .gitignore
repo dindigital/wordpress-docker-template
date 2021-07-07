@@ -1,0 +1,11 @@
+.idea
+.DS_Store
+wordpress/*
+!wordpress/Dockerfile
+!wordpress/php.ini
+!wordpress/wp-content
+wordpress/wp-content/debug.log
+wordpress/wp-content/wflogs
+wordpress/wp-content/ai1wm-backups
+wordpress/wp-content/cache
+wordpress/wp-content/uploads/sucuri
